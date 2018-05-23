@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { WeatherService } from '../weather.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-city',
@@ -19,16 +19,24 @@ export class CityComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.city = this.route.snapshot.params['city'];
 
-    this.weatherService.getCurrentWeather(this.city).subscribe(x => {
-      this.weather = x.weather.description;
-      this.temp = x.temp;
-    },
-      error => {
-        console.log('error occured', error);
-        this.failedToLoad = true;
-      });
+    this.route.paramMap.subscribe(route => {
+      this.city = route.get('city');
+      this.reset();
+      this.weatherService.getCurrentWeather(this.city).subscribe(x => {
+        this.weather = x.weather.description;
+        this.temp = x.temp;
+      },
+        error => {
+          console.log('error occured', error);
+          this.failedToLoad = true;
+        });
+    });
   }
 
+  reset() {
+    this.failedToLoad = false;
+    this.weather = '?';
+    this.temp = 0;
+  }
 }
