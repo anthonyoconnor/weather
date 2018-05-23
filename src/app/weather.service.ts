@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { map, delay } from 'rxjs/operators';
+import { ConfigService } from './config.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class WeatherService {
 
   constructor(private httpClient: HttpClient) { }
@@ -26,3 +25,37 @@ export class WeatherService {
       }));
   }
 }
+
+
+@Injectable()
+export class DevelopmentWeatherService {
+  getCurrentWeather(city: string): Observable<any> {
+    const weather = { description: 'Rain Rain Rain' };
+    const temp = 12.2;
+    const x = { weather, temp };
+    // of(x).pipe(delay(2000)) allows you to mimic delays
+    // that can happen when you call the real api.
+    return of(x).pipe(delay(2000));
+
+    // throwError can mimic errors from the API call.
+    // return throwError('mimic an api failure');
+  }
+}
+
+
+export function weatherServiceFactory(httpClient: HttpClient, configService: ConfigService) {
+  let service: any;
+
+  if (configService.inMemoryApi) {
+    service = new DevelopmentWeatherService();
+  } else {
+    service = new WeatherService(httpClient);
+  }
+  return service;
+}
+
+export let weatherServiceProvider = {
+  provide: WeatherService,
+  useFactory: weatherServiceFactory,
+  deps: [HttpClient, ConfigService]
+};
