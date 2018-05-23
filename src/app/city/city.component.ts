@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WeatherService } from '../weather.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-city',
@@ -8,16 +9,18 @@ import { WeatherService } from '../weather.service';
 })
 export class CityComponent implements OnInit {
 
-  city = 'Vancouver';
+  city = '?';
   weather = '?';
   temp = 0;
   failedToLoad: boolean;
 
-  constructor(public weatherService: WeatherService) {
+  constructor(public weatherService: WeatherService, private route: ActivatedRoute) {
 
   }
 
   ngOnInit() {
+    this.city = this.route.snapshot.params['city'];
+
     this.weatherService.getCurrentWeather(this.city).subscribe(x => {
       this.weather = x.weather.description;
       this.temp = x.temp;
