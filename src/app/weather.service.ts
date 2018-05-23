@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
+import { map, delay, materialize, dematerialize } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 
 @Injectable()
@@ -39,6 +39,10 @@ export class DevelopmentWeatherService {
 
     // throwError can mimic errors from the API call.
     // return throwError('mimic an api failure');
+
+    // const error = new Error();
+    // error['status'] = 400;
+    // return throwError(error).pipe(materialize(), delay(2000), dematerialize());
   }
 }
 
