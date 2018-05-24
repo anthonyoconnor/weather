@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WeatherService } from '../weather.service';
 import { Router } from '@angular/router';
+import { CityStorageService } from '../city-storage.service';
 
 @Component({
   selector: 'app-add-city',
@@ -11,7 +12,7 @@ export class AddCityComponent implements OnInit {
   newCity: string;
   failed: boolean;
   searching: boolean;
-  constructor(public weatherService: WeatherService, private router: Router) { }
+  constructor(public weatherService: WeatherService, private router: Router, public cityStorage: CityStorageService) { }
 
   ngOnInit() {
   }
@@ -23,6 +24,7 @@ export class AddCityComponent implements OnInit {
     this.weatherService.getCurrentWeather(city).subscribe(x => {
       console.log('Successfully found city');
       this.searching = false;
+      this.cityStorage.addCity(city);
       this.router.navigate(['/city/' + city]);
     },
       error => {

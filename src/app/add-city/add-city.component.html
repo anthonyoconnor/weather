@@ -3,3 +3,5 @@
 <button (click)="addCity()" [disabled]="searching">Add</button>
 
 <div *ngIf="failed">Could not add the city.</div>
+
+<div>Stored cities: {{cityStorage.cities}}</div>
