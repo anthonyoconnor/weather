@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-city.component.less']
 })
 export class AddCityComponent implements OnInit {
+  newCity: string;
 
   constructor() { }
 
