@@ -9,20 +9,24 @@ import { WeatherService } from '../weather.service';
 export class AddCityComponent implements OnInit {
   newCity: string;
   failed: boolean;
+  searching: boolean;
   constructor(public weatherService: WeatherService) { }
 
   ngOnInit() {
   }
 
   addCity() {
+    this.searching = true;
     this.failed = false;
     const city = this.newCity;
     this.weatherService.getCurrentWeather(city).subscribe(x => {
       console.log('Successfully found city');
+      this.searching = false;
     },
       error => {
         console.log('Could not add city');
         this.failed = true;
+        this.searching = false;
       });
   }
 

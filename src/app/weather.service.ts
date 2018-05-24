@@ -35,7 +35,7 @@ export class DevelopmentWeatherService {
     const x = { weather, temp };
     // of(x).pipe(delay(2000)) allows you to mimic delays
     // that can happen when you call the real api.
-    return of(x).pipe(delay(2000));
+    return of(x).pipe(delay(5000));
 
     // throwError can mimic errors from the API call.
     // return throwError('mimic an api failure');
