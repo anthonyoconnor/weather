@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WeatherService } from '../weather.service';
 
 @Component({
   selector: 'app-add-city',
@@ -7,10 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddCityComponent implements OnInit {
   newCity: string;
-
-  constructor() { }
+  failed: boolean;
+  constructor(public weatherService: WeatherService) { }
 
   ngOnInit() {
+  }
+
+  addCity() {
+    this.failed = false;
+    const city = this.newCity;
+    this.weatherService.getCurrentWeather(city).subscribe(x => {
+      console.log('Successfully found city');
+    },
+      error => {
+        console.log('Could not add city');
+        this.failed = true;
+      });
   }
 
 }

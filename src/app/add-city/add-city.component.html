@@ -1,2 +1,5 @@
 <input type="text" placeholder="Vancouver" [(ngModel)]="newCity"> 
 <div>{{newCity}}</div>  <!-- This will show it works -->
+<button (click)="addCity()">Add</button>
+
+<div *ngIf="failed">Could not add the city.</div>
