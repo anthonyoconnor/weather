@@ -19,7 +19,6 @@ export class CityComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.route.paramMap.subscribe(route => {
       this.city = route.get('city');
       this.reset();

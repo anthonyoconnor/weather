@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WeatherService } from './weather.service';
+import { CityStorageService } from './city-storage.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,7 @@ import { WeatherService } from './weather.service';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
+
+  constructor() {
+  }
 }
