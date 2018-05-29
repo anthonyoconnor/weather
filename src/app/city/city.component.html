@@ -1,12 +1,16 @@
-
-
 <div class="city">
     <h1>{{city | uppercase }}</h1>
 
     <div>{{weather}}</div>
     <div>{{temp}}</div>
-    
+
     <div *ngIf="failedToLoad">Weather is not available. Try looking out the window.</div>
 </div>
 
 <a routerLink="/add-city">Add new city</a>
+<button (click)="removeCity()">Remove city</button>
+<div>
+    <a *ngIf="previousCity" routerLink="/city/{{previousCity}}">Previous</a>
+    <span>Total cities: {{totalCities}}</span>
+    <a *ngIf="nextCity" routerLink="/city/{{nextCity}}">Next</a>
+</div>
