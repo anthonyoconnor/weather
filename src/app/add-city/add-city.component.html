@@ -1,7 +1,4 @@
-<input type="text" placeholder="Vancouver" [(ngModel)]="newCity" [disabled]="searching" > 
-<div>{{newCity}}</div>  <!-- This will show it works -->
-<button (click)="addCity()" [disabled]="searching">Add</button>
+<input (keyup.enter)="addCity()" type="text" placeholder="Vancouver" [(ngModel)]="newCity" [disabled]="searching" > 
+<button (click)="addCity()" [disabled]="searching || !newCity">Add</button>
 
 <div *ngIf="failed">Could not add the city.</div>
-
-<div>Stored cities: {{cityStorage.cities}}</div>

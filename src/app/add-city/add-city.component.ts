@@ -18,9 +18,12 @@ export class AddCityComponent implements OnInit {
   }
 
   addCity() {
+    if (!this.newCity) {
+      return;
+    }
     this.searching = true;
     this.failed = false;
-    const city = this.newCity;
+    const city = this.newCity.trim().toLocaleLowerCase();
     this.weatherService.getCurrentWeather(city).subscribe(x => {
       console.log('Successfully found city');
       this.searching = false;
