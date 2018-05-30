@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { WeatherService } from '../weather.service';
+import { WeatherService, WeatherModel, WeatherType } from '../weather.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CityStorageService } from '../city-storage.service';
 
@@ -13,9 +13,11 @@ export class CityComponent implements OnInit {
   previousCity: string;
   totalCities: number;
   city = '?';
-  weather = '?';
-  temp = 0;
+  weather: WeatherModel;
   failedToLoad: boolean;
+
+  // This is to allow the enum to be used in the template;
+  WeatherType = WeatherType;
 
   constructor(public weatherService: WeatherService, private route: ActivatedRoute,
     public cityStorage: CityStorageService, private router: Router) {
@@ -30,8 +32,7 @@ export class CityComponent implements OnInit {
       this.totalCities = this.cityStorage.totalCities();
       this.reset();
       this.weatherService.getCurrentWeather(this.city).subscribe(x => {
-        this.weather = x.weather.description;
-        this.temp = x.temp;
+        this.weather = x;
       },
         error => {
           console.log('error occured', error);
@@ -44,8 +45,7 @@ export class CityComponent implements OnInit {
 
   reset() {
     this.failedToLoad = false;
-    this.weather = '?';
-    this.temp = 0;
+    this.weather = undefined;
   }
 
   removeCity() {
@@ -56,5 +56,13 @@ export class CityComponent implements OnInit {
     } else {
       this.router.navigate(['/add-city/']);
     }
+  }
+
+  isDay() {
+    // TODO: This should check sunrise and sunset times to determine
+    // if it is night time. Since your local time is different than
+    // the city's time.
+    const currentHour = new Date().getHours();
+    return (currentHour > 6 && currentHour < 20);
   }
 }

@@ -11,7 +11,7 @@ export class WeatherService {
   apiKey = '665d48140dca13e411595586a256c4ce';
   unit = 'metric';
 
-  getCurrentWeather(city: string): Observable<any> {
+  getCurrentWeather(city: string): Observable<WeatherModel> {
     const apiCall = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${this.unit}&APPID=${this.apiKey}`;
     console.log('apiCall', apiCall);
     return this.httpClient.get<any>(apiCall).pipe(
@@ -19,23 +19,66 @@ export class WeatherService {
         console.log('Response', resp);
         const weather = resp.weather[0];
         const temp = resp.main.temp;
-        const x = { weather, temp };
-        console.log(x);
-        return x;
+        return new WeatherModel(getWeatherType(weather.id), weather.description, temp);
       }));
   }
 }
 
+export class WeatherModel {
+  constructor(readonly type: WeatherType, readonly description: string,
+    public tempature: number) {
+  }
+}
+function getWeatherType(weatherId: number): WeatherType {
+  if (weatherId >= 200 && weatherId < 300) {
+    return WeatherType.lightning;
+  }
+
+  if (weatherId >= 300 && weatherId < 600) {
+    return WeatherType.rain;
+  }
+
+  if (weatherId >= 600 && weatherId < 700) {
+    return WeatherType.snow;
+  }
+
+  if (weatherId >= 700 && weatherId < 800) {
+    return WeatherType.fog;
+  }
+
+  if (weatherId === 800) {
+    return WeatherType.clear;
+  }
+
+  if (weatherId === 801) {
+    return WeatherType.partialClear;
+  }
+
+
+  if (weatherId >= 801 && weatherId < 900) {
+    return WeatherType.cloud;
+  }
+
+  return WeatherType.unknown;
+}
+export enum WeatherType {
+  cloud,
+  fog,
+  clear,
+  rain,
+  partialClear,
+  lightning,
+  snow,
+  unknown
+}
 
 @Injectable()
 export class DevelopmentWeatherService {
-  getCurrentWeather(city: string): Observable<any> {
-    const weather = { description: 'Rain Rain Rain' };
-    const temp = 12.2;
-    const x = { weather, temp };
+  getCurrentWeather(city: string): Observable<WeatherModel> {
+    const weather = new WeatherModel(WeatherType.lightning, 'lightning', 12.2);
     // of(x).pipe(delay(2000)) allows you to mimic delays
     // that can happen when you call the real api.
-    return of(x).pipe(delay(5000));
+    return of(weather).pipe(delay(1000));
 
     // throwError can mimic errors from the API call.
     // return throwError('mimic an api failure');
