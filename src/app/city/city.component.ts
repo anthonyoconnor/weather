@@ -59,10 +59,7 @@ export class CityComponent implements OnInit {
   }
 
   isDay() {
-    // TODO: This should check sunrise and sunset times to determine
-    // if it is night time. Since your local time is different than
-    // the city's time.
-    const currentHour = new Date().getHours();
-    return (currentHour > 6 && currentHour < 20);
+    const now = new Date();
+    return (this.weather.sunrise < now && this.weather.sunset > now);
   }
 }

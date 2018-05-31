@@ -19,14 +19,17 @@ export class WeatherService {
         console.log('Response', resp);
         const weather = resp.weather[0];
         const temp = resp.main.temp;
-        return new WeatherModel(getWeatherType(weather.id), weather.description, temp);
+        const sunrise = resp.sys.sunrise * 1000;
+        const sunset = resp.sys.sunset * 1000;
+        return new WeatherModel(getWeatherType(weather.id), weather.description, temp,
+          new Date(sunrise), new Date(sunset));
       }));
   }
 }
 
 export class WeatherModel {
   constructor(readonly type: WeatherType, readonly description: string,
-    public tempature: number) {
+    readonly tempature: number, readonly sunrise: Date, readonly sunset: Date) {
   }
 }
 function getWeatherType(weatherId: number): WeatherType {
@@ -75,7 +78,14 @@ export enum WeatherType {
 @Injectable()
 export class DevelopmentWeatherService {
   getCurrentWeather(city: string): Observable<WeatherModel> {
-    const weather = new WeatherModel(WeatherType.lightning, 'lightning', 12.2);
+    const sunrise = new Date();
+    sunrise.setHours(sunrise.getHours() - 2);
+
+    const sunset = new Date();
+    sunset.setHours(sunset.getHours() + 2);
+
+    const weather = new WeatherModel(WeatherType.clear, 'clear', 12.2,
+      sunrise, sunset);
     // of(x).pipe(delay(2000)) allows you to mimic delays
     // that can happen when you call the real api.
     return of(weather).pipe(delay(1000));
