@@ -6,12 +6,18 @@ import { ConfigService } from './config.service';
 
 @Injectable()
 export class WeatherService {
-
-  constructor(private httpClient: HttpClient) { }
   apiKey = '665d48140dca13e411595586a256c4ce';
   unit = 'metric';
+  weatherModels: WeatherModel[] = [];
+
+  constructor(private httpClient: HttpClient) {
+  }
 
   getCurrentWeather(city: string): Observable<WeatherModel> {
+    const existing = this.weatherModels.find(w => w.city.toLocaleLowerCase() === city.toLocaleLowerCase());
+    if (existing) {
+      return of(existing);
+    }
     const apiCall = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${this.unit}&APPID=${this.apiKey}`;
     console.log('apiCall', apiCall);
     return this.httpClient.get<any>(apiCall).pipe(
@@ -21,14 +27,17 @@ export class WeatherService {
         const temp = resp.main.temp;
         const sunrise = resp.sys.sunrise * 1000;
         const sunset = resp.sys.sunset * 1000;
-        return new WeatherModel(getWeatherType(weather.id), weather.description, temp,
+        const model = new WeatherModel(city, getWeatherType(weather.id), weather.description, temp,
           new Date(sunrise), new Date(sunset));
+        this.weatherModels.push(model);
+
+        return model;
       }));
   }
 }
 
 export class WeatherModel {
-  constructor(readonly type: WeatherType, readonly description: string,
+  constructor(readonly city: string, readonly type: WeatherType, readonly description: string,
     readonly tempature: number, readonly sunrise: Date, readonly sunset: Date) {
   }
 }
@@ -84,7 +93,7 @@ export class DevelopmentWeatherService {
     const sunset = new Date();
     sunset.setHours(sunset.getHours() + 2);
 
-    const weather = new WeatherModel(WeatherType.clear, 'clear', 12.2,
+    const weather = new WeatherModel(city, WeatherType.clear, 'clear', 12.2,
       sunrise, sunset);
     // of(x).pipe(delay(2000)) allows you to mimic delays
     // that can happen when you call the real api.
