@@ -20,7 +20,7 @@
             </ng-container>
         </div>
 
-        <div class="temp">{{weather.tempature}}</div>
+        <div class="temp">{{weather.tempature | number:'1.1-1'}}&#8451;</div>
     </div>
     <ng-container *ngIf="failedToLoad">
         <div>
