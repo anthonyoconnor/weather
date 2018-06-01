@@ -1,4 +1,9 @@
-<input (keyup.enter)="addCity()" type="text" placeholder="Vancouver" [(ngModel)]="newCity" [disabled]="searching" > 
+<input (keyup.enter)="addCity()" type="text" placeholder="Vancouver" [(ngModel)]="newCity" [disabled]="searching">
 <button (click)="addCity()" [disabled]="searching || !newCity">Add</button>
 
 <div *ngIf="failed">Could not add the city.</div>
+<div class="existing">
+    <a *ngFor="let city of cityStorage.cities"routerLink="/city/{{city}}">
+       {{city}}
+    </a>
+</div>

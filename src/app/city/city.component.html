@@ -26,15 +26,31 @@
         <div>
             <img src="assets/unknown.png" alt="Look out the window.">
         </div>
-        <div>Weather is not available. Try looking out the window.</div>
+        <div>Weather is not available.</div>
+        <div>Try looking out the window.</div>
     </ng-container>
-
 </div>
+<div class="controls">
+    <a *ngIf="previousCity" routerLink="/city/{{previousCity}}">
+        &lt;
+    </a>
 
-<a routerLink="/add-city">Add new city</a>
-<button (click)="removeCity()">Remove city</button>
-<div>
-    <a *ngIf="previousCity" routerLink="/city/{{previousCity}}">Previous</a>
-    <span>Total cities: {{totalCities}}</span>
-    <a *ngIf="nextCity" routerLink="/city/{{nextCity}}">Next</a>
+    <div class="disabled" *ngIf="!previousCity">
+        &lt;
+    </div>
+
+    <a class="add" routerLink="/add-city">
+        +
+    </a>
+    <a class="remove" (click)="removeCity()">
+        -
+    </a>
+
+    <a *ngIf="nextCity" routerLink="/city/{{nextCity}}">
+        &gt;
+    </a>
+
+    <div class="disabled" *ngIf="!nextCity">
+        &gt;
+    </div>
 </div>

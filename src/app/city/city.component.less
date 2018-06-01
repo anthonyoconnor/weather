@@ -19,3 +19,34 @@
         text-align: center;
     }
 }
+
+a {
+    color: black;
+    text-decoration: none;
+    &:hover {
+        cursor: pointer;
+        color: #666;
+      }
+
+    &.add {
+        &:hover {
+            color:green; 
+        }
+    }
+
+    &.remove {
+        &:hover {
+            color:red; 
+        }
+    }
+}
+
+.disabled {
+    color: rgb(192, 192, 192);
+}
+
+.controls {
+    font-size: 2em;
+    display: flex;
+    justify-content: space-around;
+}
